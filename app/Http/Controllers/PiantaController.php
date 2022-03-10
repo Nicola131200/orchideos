@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Pianta;
+use App\Annaffiatura;
+use App\Concimatura;
+use Illuminate\Support\Facades\Storage;
 
 class PiantaController extends Controller
 {
@@ -16,9 +19,9 @@ class PiantaController extends Controller
      */
     public function index()
     {
-        $piante = Pianta::where('user_id',Auth::user()->id)->get();
+        $piante = Pianta::where('user_id', Auth::user()->id)->get();
         //dd($piante);
-        return view('home',['piante'=>$piante]);
+        return view('home', ['piante' => $piante]);
     }
 
     /**
@@ -43,7 +46,7 @@ class PiantaController extends Controller
         $validator = Validator::make($request->all(), [
             'nome' => 'required|string|max:100',
             'tipologia' => 'required|string|max:100',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg'
+            'data_acquisto' => 'required|date_format:Y-m-d'
         ]);
 
         if ($validator->fails()) {
@@ -53,20 +56,13 @@ class PiantaController extends Controller
         $pianta = Pianta::create([
             'nome' => $request['nome'],
             'tipologia' => $request['tipologia'],
+            'data_acquisto' => $request['data_acquisto'],
             'user_id' => Auth::user()->id
         ]);
 
         $pianta->save();
 
-        $extension = $request->file('image')->getClientOriginalExtension();
-
-        $request->file('image')->storeAs('public/storage/uploads',$pianta->id . '.' . $extension);
-
-        $pianta->img_url = 'public/storage/storage/uploads/'. $pianta->id . '.' . $extension;
-
-        $pianta->save();
-        
-        return redirect()->route('piante.create')->with('status','success');
+        return redirect()->route('piante.create')->with('status', 'success');
     }
 
     /**
@@ -77,7 +73,15 @@ class PiantaController extends Controller
      */
     public function show($id)
     {
-        //
+        $pianta = Pianta::findOrFail($id);
+        $annaffiature = $pianta->annaffiature()->get();
+        $concimature = $pianta->concimature()->get();
+
+        return view('show.pianta', 
+            ['pianta' => $pianta,
+            'annaffiature' => $annaffiature,
+            'concimature' => $concimature]
+        );
     }
 
     /**
@@ -88,7 +92,8 @@ class PiantaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pianta = Pianta::findOrFail($id);
+        return view('edit.pianta', ['pianta' => $pianta]);
     }
 
     /**
@@ -100,7 +105,25 @@ class PiantaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $pianta = Pianta::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'nome' => 'required|string|max:100',
+            'tipologia' => 'required|string|max:100',
+            'data_acquisto' => 'required|date_format:Y-m-d'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $pianta->nome = $request['nome'];
+        $pianta->tipologia = $request['tipologia'];
+        $pianta->data_acquisto = $request['data_acquisto'];
+
+        $pianta->save();
+
+        return redirect()->route('index')->with('status', 'aggiornato');
     }
 
     /**
@@ -111,6 +134,8 @@ class PiantaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $pianta = Pianta::findOrFail($id);
+        $pianta->delete();
+        return redirect()->route('index');
     }
 }

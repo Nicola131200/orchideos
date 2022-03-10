@@ -18,7 +18,7 @@ class CreatePiantasTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('nome', 100);
             $table->string('tipologia', 100);
-            $table->string('img_url', 100)->nullable();
+            $table->date('data_acquisto');
             $table->timestamps();
         });
     }

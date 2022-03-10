@@ -8,7 +8,7 @@ class Pianta extends Model
 {
     protected $table = 'piantas';
 
-    protected $fillable = ['nome','user_id','tipologia','img_url'];
+    protected $fillable = ['nome','user_id','tipologia','data_acquisto'];
 
     /**
      * Get all of the annaffiature for the Pianta
