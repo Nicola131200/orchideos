@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Concimatura;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ConcimaturaController extends Controller
 {
@@ -34,7 +36,22 @@ class ConcimaturaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'dataora_concimatura' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator]);
+        }
+
+        $concimatura = Concimatura::create([
+            'dataora_concimatura' => $request['dataora_concimatura'],
+            'pianta_id' => $request['pianta_id']
+        ]);
+
+        $concimatura->save();
+
+        return response()->json(['success' => 'Dati salvati']);
     }
 
     /**

@@ -8,5 +8,5 @@ class Annaffiatura extends Model
 {
     protected $table = 'annaffiaturas';
 
-    protected $fillable = ['dataora_annaffiatura','qta','pianta_id'];
+    protected $fillable = ['dataora_annaffiatura','pianta_id'];
 }

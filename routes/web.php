@@ -42,4 +42,8 @@ Route::get('piante/show/{id}','PiantaController@show')->name('piante.show');
 
 Route::delete('piante/delete/{id}','PiantaController@destroy')->name('pianta.delete');
 
+Route::post('annaffiatura','AnnaffiaturaController@store')->name('annaffiatura.store');
+
+Route::post('concimatura','ConcimaturaController@store')->name('concimatura.store');
+
 

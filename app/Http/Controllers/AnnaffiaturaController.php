@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Annaffiatura;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 
 class AnnaffiaturaController extends Controller
 {
@@ -34,7 +37,23 @@ class AnnaffiaturaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'dataora_annaffiatura' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator]);
+        }
+
+        $annaffiatura = Annaffiatura::create([
+            'dataora_annaffiatura' => $request['dataora_annaffiatura'],
+            'pianta_id' => $request['pianta_id']
+        ]);
+
+        $annaffiatura->save();
+
+        return response()->json(['success' => 'Dati salvati']);
+
     }
 
     /**

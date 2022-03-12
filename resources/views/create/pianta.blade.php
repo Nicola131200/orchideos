@@ -28,7 +28,7 @@
                     <input class="form-control mt-1 mb-2" type="text" name="tipologia" id="tipologia"
                         placeholder="Inserisci la tipologia" required>
 
-                    <label for="data_acquisto">Carica Foto</label>
+                    <label for="data_acquisto">Data Acquisto:</label>
                     <input class="form-control mt-1 mb-2" max="{{ date('Y-m-d') }}" type="date" name="data_acquisto" id="data_acquisto" required>
 
                     <input class="btn btn-primary mt-1" type="submit" value="Conferma">

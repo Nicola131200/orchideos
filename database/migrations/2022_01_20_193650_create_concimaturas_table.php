@@ -17,7 +17,6 @@ class CreateConcimaturasTable extends Migration
             $table->id();
             $table->foreignId('pianta_id')->constrained();
             $table->dateTime('dataora_concimatura');
-            $table->integer('qta');
             $table->timestamps();
         });
     }

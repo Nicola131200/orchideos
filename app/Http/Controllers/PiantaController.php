@@ -74,8 +74,8 @@ class PiantaController extends Controller
     public function show($id)
     {
         $pianta = Pianta::findOrFail($id);
-        $annaffiature = $pianta->annaffiature()->get();
-        $concimature = $pianta->concimature()->get();
+        $annaffiature = $pianta->annaffiature()->orderBy('dataora_annaffiatura')->get();
+        $concimature = $pianta->concimature()->orderBy('dataora_concimatura')->get();
 
         return view('show.pianta', 
             ['pianta' => $pianta,

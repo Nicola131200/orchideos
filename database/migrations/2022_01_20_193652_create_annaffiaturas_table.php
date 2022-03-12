@@ -17,7 +17,6 @@ class CreateAnnaffiaturasTable extends Migration
             $table->id();
             $table->foreignId('pianta_id')->constrained();
             $table->dateTime('dataora_annaffiatura');
-            $table->integer('qta');
             $table->timestamps();
         });
     }
